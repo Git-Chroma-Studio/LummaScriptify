@@ -9,18 +9,18 @@ export default {
             file: "dist/index.min.js", // Para CDN (UMD)
             format: "umd",
             name: "LummaScriptify",
-            exports: "named",
+            exports: "named", // Para exportações nomeadas
             plugins: [terser()], // Minificação
         },
         {
             file: "dist/index.esm.js", // Para import ESModules
             format: "es",
-            exports: "named",
+            // Não é necessário exports aqui
         },
         {
             file: "dist/index.cjs.js", // Para Node.js (CommonJS)
             format: "cjs",
-            exports: "named",
+            exports: "named", // Para exportações nomeadas
         },
     ],
     plugins: [nodeResolve(), commonjs()],
