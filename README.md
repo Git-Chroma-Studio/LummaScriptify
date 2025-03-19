@@ -21,7 +21,7 @@ import { Cookie } from '@chroma.studio/lummascriptify';
 Para usar a biblioteca diretamente no navegador, adicione o seguinte script no seu HTML:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@chroma.studio/lummascriptify/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@chroma.studio/lummascriptify@<version>/dist/index.min.js"></script>
 ```
 
 ## Licença de Uso
