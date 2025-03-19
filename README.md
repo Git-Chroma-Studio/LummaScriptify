@@ -1,4 +1,4 @@
-# Documentação da Biblioteca `LummaScriptify` ![NPM Version](https://img.shields.io/npm/v/%40chroma.studio%2Flummascriptify)
+# Documentação da Biblioteca `LummaScriptify` ![NPM Version](https://img.shields.io/npm/v/%40chroma-studio%2Flummascriptify)
 
 A biblioteca **LummaScriptify** é uma coleção de utilitários JavaScript que estende funcionalidades nativas de tipos como `Number`, `String`, `Array`, `Date` e `Object`, além de fornecer funções úteis para manipulação de formulários, cookies, datas, strings, entre outros. Ela foi projetada para simplificar tarefas comuns no desenvolvimento web.
 
@@ -8,20 +8,20 @@ A biblioteca **LummaScriptify** é uma coleção de utilitários JavaScript que 
 Para instalar a biblioteca via NPM, execute o seguinte comando:
 
 ```bash
-npm install @chroma.studio/lummascriptify
+npm install @chroma-studio/lummascriptify
 ```
 
 Após a instalação, você pode importar a biblioteca em seu projeto:
 
 ```javascript
-import { Cookie } from '@chroma.studio/lummascriptify';
+import { Cookie } from '@chroma-studio/lummascriptify';
 ```
 
 ### Via CDN
 Para usar a biblioteca diretamente no navegador, adicione o seguinte script no seu HTML:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@chroma.studio/lummascriptify@<version>/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@chroma-studio/lummascriptify@<version>/dist/index.min.js"></script>
 ```
 
 ## Licença de Uso
