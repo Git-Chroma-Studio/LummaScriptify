@@ -2,9 +2,7 @@
 
 // #region Classes
 class Cookie {
-
-    constructor() { }
-
+    
     /**
      * Define um cookie.
      * @param {string} name - Nome do cookie.
@@ -538,23 +536,24 @@ if (typeof module !== "undefined" && typeof exports !== "undefined") {
 
 // 📌 **Exportação para Uso no Navegador (CDN)**
 if (typeof window !== "undefined") {
-    window.LummaScriptify = {
-        Cookie,
-        serializeJson,
-        serializeJsonComplex,
-        parseBool,
-        uuid,
-        getString,
-        sumElements,
-        compareDates,
-        getData,
-        sleep,
-        populate,
-        isHTMLElement,
-        dataURLToBlob,
-        base64ToBlob,
-        isLightOrDark,
-        isObject,
-        getRandom
-    };
+    // Expondo as funções diretamente no window
+    window.uuid = uuid;
+    window.serializeJson = serializeJson;
+    window.serializeJsonComplex = serializeJsonComplex;
+    window.parseBool = parseBool;
+    window.getString = getString;
+    window.sumElements = sumElements;
+    window.compareDates = compareDates;
+    window.getData = getData;
+    window.sleep = sleep;
+    window.populate = populate;
+    window.isHTMLElement = isHTMLElement;
+    window.dataURLToBlob = dataURLToBlob;
+    window.base64ToBlob = base64ToBlob;
+    window.isLightOrDark = isLightOrDark;
+    window.isObject = isObject;
+    window.getRandom = getRandom;
+
+    // Também expondo a classe Cookie
+    window.Cookie = Cookie;
 }
