@@ -1,16 +1,38 @@
 {
-  "name": "lummascriptify",
+  "name": "@chroma.studio/lummascriptify",
   "version": "1.0.0",
   "description": "Uma biblioteca de utilitários JavaScript para simplificar tarefas comuns no desenvolvimento web.",
   "license": "AGPL-3.0",
-  "main": "index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/index.min.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "npm publish --access public",
+    "clear": "rmdir /s /q dist",
+    "build": "npx rollup -c",
+    "build:types": "tsc",
+    "build:all": "npm run clear && npm run build && npm run build:types"    
   },
-  "keywords": ["javascript", "utils", "utilities", "web development"],
+  "keywords": [
+    "javascript",
+    "utils",
+    "utilities",
+    "web development"
+  ],
   "author": "Oséias Domingos Gomes <oseias.d.gomes@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/git-chroma-studio/lummascriptify"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^3.20.0",
+    "terser": "^5.0.0",
+    "typescript": "^4.0.0"
   }
 }

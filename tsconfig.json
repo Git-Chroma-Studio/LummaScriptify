@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist",                        // Saída dos arquivos compilados
+      "declaration": true,                       // Gera arquivos .d.ts
+      "module": "ESNext",                        // Utiliza o formato de módulos ES (sem CommonJS ou AMD)
+      "target": "ES2019",
+      "sourceMap": true,                         // Gera mapas de origem para depuração
+      "strict": true,                            // Ativa checagem estrita
+      "moduleResolution": "node",                // Resolução de módulos estilo Node.js
+      "allowJs": true, 
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]   // Exclui node_modules
+  }
+  

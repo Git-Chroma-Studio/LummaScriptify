@@ -8,20 +8,20 @@ A biblioteca **LummaScriptify** é uma coleção de utilitários JavaScript que 
 Para instalar a biblioteca via NPM, execute o seguinte comando:
 
 ```bash
-npm install lummascriptify
+npm install @chroma.studio/lummascriptify
 ```
 
 Após a instalação, você pode importar a biblioteca em seu projeto:
 
 ```javascript
-import 'lummascriptify';
+import { Cookie } from '@chroma.studio/lummascriptify';
 ```
 
 ### Via CDN
 Para usar a biblioteca diretamente no navegador, adicione o seguinte script no seu HTML:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/lummascriptify/dist/lummascriptify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@chroma.studio/lummascriptify/dist/index.min.js"></script>
 ```
 
 ## Licença de Uso

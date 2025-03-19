@@ -27,21 +27,6 @@
 ███████╗╚██████╔╝██║░╚═╝░██║██║░╚═╝░██║██║░░██║██████╔╝╚█████╔╝██║░░██║██║██║░░░░░░░░██║░░░██║██║░░░░░░░░██║░░░
 ╚══════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░╚════╝░╚═╝░░╚═╝╚═╝╚═╝░░░░░░░░╚═╝░░░╚═╝╚═╝░░░░░░░░╚═╝░░░`);
 
-    console.log(
-        "%c🔹 Desenvolvimento Web | 🔹 APIs | 🔹 Automação | 🔹 Soluções Sob Medida",
-        "color: #1e1e1e; font-size: 14px; font-weight: bold;"
-    );
-
-    console.log(
-        "%c💡 Precisando de um time especializado para seu projeto? Fale conosco!",
-        "color: #007bff; font-size: 14px; font-style: italic;"
-    );
-
-    console.log(
-        "%c🌐 www.chromacoreteam.com | 📧 oseias.d.gomes@gmail.com",
-        "color: #28a745; font-size: 14px; font-weight: bold;"
-    );
-
     // Extensões para Number
     if (!Number.prototype.toMoney)
         /**
@@ -55,7 +40,7 @@
                 currency: "BRL",
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
-            }).format(this);
+            }).format(this.valueOf());
         };
 
     if (!Number.prototype.toRound)
@@ -67,11 +52,11 @@
         Number.prototype.toRound = function (precision = 0) {
             switch (precision) {
                 case 1:
-                    return Math.floor(this);
+                    return Math.floor(this.valueOf());
                 case 2:
-                    return Math.ceil(this);
+                    return Math.ceil(this.valueOf());
                 default:
-                    return Math.round(this);
+                    return Math.round(this.valueOf());
             }
         };
 
@@ -90,7 +75,7 @@
         /**
          * Divide um array em subarrays de tamanho especificado.
          * @param {number} divisao - Tamanho de cada subarray.
-         * @returns {Array<Array>} - Array de subarrays.
+         * @returns {Array<Array<any>>} - Array de subarrays.
          */
         Array.prototype.divide = function (divisao) {
             return this.reduce((acc, _, i) => {
@@ -111,13 +96,14 @@
             const options = {
                 day: '2-digit',
                 month: '2-digit',
-                year: 'numeric'
+                year: 'numeric',
             };
 
             if (showTime) {
                 options.hour = '2-digit';
                 options.minute = '2-digit';
             }
+
             return this.toLocaleString('pt-BR', options).replace(',', showTime ? ` ${base}` : '');
         };
 
@@ -341,7 +327,7 @@
          */
         String.prototype.isEmail = function () {
             const regex = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/;
-            return regex.test(this);
+            return regex.test(this.valueOf());
         };
 
     if (!String.prototype.isURL)
@@ -359,7 +345,7 @@
                 '(\\#[-a-z\\d_]*)?$', // fragmento
                 'i' // flag case-insensitive
             );
-            return !!pattern.test(this); // Retorna true ou false
+            return !!pattern.test(this.valueOf()); // Retorna true ou false
         };
 
     if (!Object.prototype.isNullOrEmpty)
@@ -461,11 +447,12 @@
          * @returns {Array<{ key: string, value: string }>} - Array de objetos com chave e valor dos cookies.
          */
         GetAll() {
-            return document.cookie.split(";").map((cookie) => {
-                const [name, ...valParts] = cookie.trim().split("=");
-                const value = valParts.join("=");
-                return { key: decodeURIComponent(name), value: decodeURIComponent(value) };
-            });
+            return document.cookie.split(";").filter((cookie) => !cookie.isNullOrWhiteSpace())
+                .map((cookie) => {
+                    const [name, ...valParts] = cookie.trim().split("=");
+                    const value = valParts.join("=");
+                    return { key: decodeURIComponent(name), value: decodeURIComponent(value) };
+                });
         }
 
         /**
@@ -624,7 +611,7 @@
      * @returns {string} - UUID gerado.
      */
     function uuid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             const r = Math.random() * 16 | 0;
             const v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
@@ -739,7 +726,7 @@
     /**
      * Pausa a execução por um determinado tempo.
      * @param {number} ms - Tempo em milissegundos.
-     * @returns {Promise} - Promise que resolve após o tempo especificado.
+     * @returns {Promise<void>} - Promise que resolve após o tempo especificado.
      */
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -850,6 +837,9 @@
      * @returns {string} - '#fff' se a cor for escura, '#000' se for clara.
      */
     function isLightOrDark(hex) {
+        /**
+         * @param {string} rgb
+         */
         function isLightOrDarkRGB(rgb) {
             const [r, g, b] = rgb.replace(/rgb|\(|\)|\s/g, '').split(',').map(Number);
 
@@ -858,6 +848,9 @@
             return luminance > 128 ? '#fff' : '#000';
         }
 
+        /**
+         * @param {string} hex
+         */
         function hexToRgb(hex) {
             const bigint = parseInt(hex.slice(1), 16);
             const r = (bigint >> 16) & 255;
@@ -908,5 +901,27 @@
         window.isLightOrDark = isLightOrDark;
         window.isObject = isObject;
         window.getRandom = getRandom;
+    }
+
+    if (typeof module !== "undefined" && typeof exports !== "undefined") {
+        module.exports = {
+            Cookie,
+            serializeJson,
+            serializeJsonComplex,
+            parseBool,
+            uuid,
+            getString,
+            sumElements,
+            compareDates,
+            getData,
+            sleep,
+            populate,
+            isHTMLElement,
+            dataURLToBlob,
+            base64ToBlob,
+            isLightOrDark,
+            isObject,
+            getRandom
+        };
     }
 })();
