@@ -1,0 +1,18 @@
+* text=auto
+
+# Define que arquivos JavaScript e TypeScript são detectados corretamente
+*.js linguist-language=JavaScript
+*.jsx linguist-language=JavaScript
+*.ts linguist-language=TypeScript
+*.tsx linguist-language=TypeScript
+
+# Normaliza o fim de linha para arquivos de código
+*.js eol=lf
+*.ts eol=lf
+*.json eol=lf
+*.md eol=lf
+
+# Ignora arquivos de build e dependências para estatísticas do GitHub
+/node_modules/* linguist-vendored
+/dist/* linguist-vendored
+/build/* linguist-vendored

@@ -1,0 +1,16 @@
+{
+  "name": "lummascriptify",
+  "version": "1.0.0",
+  "description": "Uma biblioteca de utilitários JavaScript para simplificar tarefas comuns no desenvolvimento web.",
+  "license": "AGPL-3.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["javascript", "utils", "utilities", "web development"],
+  "author": "Oséias Domingos Gomes <oseias.d.gomes@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/git-chroma-studio/lummascriptify"
+  }
+}
