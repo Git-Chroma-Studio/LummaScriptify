@@ -13,7 +13,7 @@
     "clear": "rmdir /s /q dist",
     "build": "npx rollup -c",
     "build:types": "tsc",
-    "build:all": "npm run clear && npm run build && npm run build:types"
+    "build:all": "npm run build && npm run build:types"
   },
   "keywords": [
     "javascript",
