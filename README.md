@@ -1,4 +1,4 @@
-# Documentação da Biblioteca `LummaScriptify` ![NPM Version](https://img.shields.io/npm/v/%40chroma-studio%2Flummascriptify)
+# Documentação da Biblioteca `LummaScriptify`
 
 A biblioteca **LummaScriptify** é uma coleção de utilitários JavaScript que estende funcionalidades nativas de tipos como `Number`, `String`, `Array`, `Date` e `Object`, além de fornecer funções úteis para manipulação de formulários, cookies, datas, strings, entre outros. Ela foi projetada para simplificar tarefas comuns no desenvolvimento web.
 

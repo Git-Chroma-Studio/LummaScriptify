@@ -1,8 +1,379 @@
 "use strict";
 
+// #region Prototype
+// Extensões para Number
+if (!Number.prototype.toMoney)
+    /**
+     * Converte um número para formato monetário.
+     * @param {boolean} [currency=false] - Se true, formata como moeda.
+     * @returns {string} - Número formatado como moeda ou decimal.
+     */
+    Number.prototype.toMoney = function (currency = false) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: currency ? "currency" : "decimal",
+            currency: "BRL",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(this.valueOf());
+    };
+
+if (!Number.prototype.toRound)
+    /**
+     * Arredonda um número com base na precisão especificada.
+     * @param {number} [precision=0] - Precisão do arredondamento (0: padrão, 1: floor, 2: ceil).
+     * @returns {number} - Número arredondado.
+     */
+    Number.prototype.toRound = function (precision = 0) {
+        switch (precision) {
+            case 1:
+                return Math.floor(this.valueOf());
+            case 2:
+                return Math.ceil(this.valueOf());
+            default:
+                return Math.round(this.valueOf());
+        }
+    };
+
+if (!Number.prototype.decimalPrecision)
+    /**
+     * Define a precisão decimal de um número.
+     * @param {number} [precision=2] - Número de casas decimais.
+     * @returns {number} - Número com a precisão definida.
+     */
+    Number.prototype.decimalPrecision = function (precision = 2) {
+        return parseFloat(this.toFixed(precision));
+    };
+
+// Extensões para Array
+if (!Array.prototype.divide)
+    /**
+     * Divide um array em subarrays de tamanho especificado.
+     * @param {number} divisao - Tamanho de cada subarray.
+     * @returns {Array<Array<any>>} - Array de subarrays.
+     */
+    Array.prototype.divide = function (divisao) {
+        return this.reduce((acc, _, i) => {
+            if (i % divisao === 0) acc.push(this.slice(i, i + divisao));
+            return acc;
+        }, []);
+    };
+
+// Extensões para Date
+if (!Date.prototype.toDefault)
+    /**
+     * Formata uma data para o padrão brasileiro.
+     * @param {boolean} [showTime=true] - Se true, inclui a hora.
+     * @param {string} [base='às'] - Texto base para separar data e hora.
+     * @returns {string} - Data formatada.
+     */
+    Date.prototype.toDefault = function (showTime = true, base = 'às') {
+        const options = {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        };
+
+        if (showTime) {
+            options.hour = '2-digit';
+            options.minute = '2-digit';
+        }
+
+        return this.toLocaleString('pt-BR', options).replace(',', showTime ? ` ${base}` : '');
+    };
+
+// Extensões para String
+if (!String.prototype.parseBool)
+    /**
+     * Converte uma string para booleano.
+     * @returns {boolean|null} - Valor booleano ou null se a string não for válida.
+     */
+    String.prototype.parseBool = function () {
+        const string = this.trim().toLowerCase();
+        if (string === "true" || string === "1") return true;
+        if (string === "false" || string === "0") return false;
+        return null;
+    };
+
+if (!String.prototype.toTitleCase)
+    /**
+     * Converte uma string para o formato de título.
+     * @param {boolean} [sigla=false] - Se true, mantém siglas em maiúsculas.
+     * @param {number} [tamanho=3] - Tamanho mínimo para considerar uma sigla.
+     * @returns {string} - String formatada como título.
+     */
+    String.prototype.toTitleCase = function (sigla = false, tamanho = 3) {
+        return this.replace(/\w\S*/g, function (txt) {
+            if (sigla && txt.length >= tamanho && txt === txt.toUpperCase()) {
+                return txt;
+            }
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    };
+
+if (!String.prototype.isNullOrEmpty)
+    /**
+     * Verifica se a string é nula ou vazia.
+     * @returns {boolean} - True se a string for nula ou vazia.
+     */
+    String.prototype.isNullOrEmpty = function () {
+        return !this || this == "";
+    };
+
+if (!String.prototype.isNullOrWhiteSpace)
+    /**
+     * Verifica se a string é nula, vazia ou contém apenas espaços em branco.
+     * @returns {boolean} - True se a string for nula, vazia ou contiver apenas espaços.
+     */
+    String.prototype.isNullOrWhiteSpace = function () {
+        return !this || this.trim() === "";
+    };
+
+if (!String.prototype.getFirstAndLastWord)
+    /**
+     * Retorna a primeira e a última palavra de uma string.
+     * @returns {string} - Primeira e última palavra da string.
+     */
+    String.prototype.getFirstAndLastWord = function () {
+        const words = this.trim().split(/\s+/);
+        if (words.length === 0) return "";
+        if (words.length === 1) return words[0];
+        return `${words[0]} ${words[words.length - 1]}`;
+    };
+
+if (!String.prototype.fileExtension)
+    /**
+     * Extrai a extensão de um nome de arquivo.
+     * @returns {string} - Extensão do arquivo.
+     */
+    String.prototype.fileExtension = function () {
+        const match = this.match(/\.([^.]+)$/);
+        return match ? match[1] : "";
+    };
+
+if (!String.prototype.hashCode)
+    /**
+     * Gera um código hash para a string.
+     * @returns {string} - Código hash em hexadecimal.
+     */
+    String.prototype.hashCode = function () {
+        let hash = 0;
+        if (this.length === 0) return hash.toString(16);
+        for (let i = 0; i < this.length; i++) {
+            const chr = this.charCodeAt(i);
+            hash = (hash << 5) - hash + chr;
+            hash |= 0;
+        }
+        return (hash >>> 0).toString(16);
+    };
+
+if (!String.prototype.toNumber)
+    /**
+     * Converte uma string para número.
+     * @returns {number} - Número convertido ou NaN se a conversão falhar.
+     */
+    String.prototype.toNumber = function () {
+        const cleaned = this.replace(/[^\d,.-]/g, '').trim();
+        const negativeMatch = cleaned.match(/^(-?)(.*)$/);
+        if (!negativeMatch) return NaN;
+        let [, negative, numberPart] = negativeMatch;
+        numberPart = numberPart.replace(/\./g, "").replace(",", ".");
+        if (numberPart.includes("."))
+            return parseFloat(negative + numberPart);
+        else
+            return parseInt(negative + numberPart, 10);
+    };
+
+if (!String.prototype.toAvatarName)
+    /**
+     * Gera um nome de avatar a partir de uma string.
+     * @returns {string} - Iniciais do nome em maiúsculas.
+     */
+    String.prototype.toAvatarName = function () {
+        const words = this.trim().split(" ").filter(Boolean);
+        const firstInitial = words[0]?.charAt(0) || "";
+        const secondInitial = words.length > 1 ? words[words.length - 1].charAt(0) : firstInitial;
+        return `${firstInitial}${secondInitial}`.toUpperCase();
+    };
+
+if (!String.prototype.isValidDocument)
+    /**
+     * Valida um documento (CPF, CNPJ, RG, CNH).
+     * @param {string} tipo - Tipo de documento ('cpf', 'cnpj', 'rg', 'cnh').
+     * @returns {boolean} - True se o documento for válido.
+     */
+    String.prototype.isValidDocument = function (tipo) {
+        const documento = this.replace(/[^\d]+/g, '');
+        if (tipo === 'cnpj') {
+            if (documento.length !== 14 || /^(\d)\1{13}$/.test(documento)) return false;
+            let tamanho = documento.length - 2;
+            let numeros = documento.substring(0, tamanho);
+            let digitos = documento.substring(tamanho);
+            let soma = 0;
+            let pos = tamanho - 7;
+            for (let i = tamanho; i >= 1; i--) {
+                soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+            if (resultado !== parseInt(digitos.charAt(0))) return false;
+            tamanho = tamanho + 1;
+            numeros = documento.substring(0, tamanho);
+            soma = 0;
+            pos = tamanho - 7;
+            for (let i = tamanho; i >= 1; i--) {
+                soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+            return resultado === parseInt(digitos.charAt(1));
+        }
+        if (tipo === 'cpf') {
+            if (documento.length !== 11 || /^(\d)\1{10}$/.test(documento)) return false;
+            let soma = 0;
+            let resto;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(documento.charAt(i)) * (10 - i);
+            }
+            resto = (soma * 10) % 11;
+            if (resto === 10 || resto === 11) resto = 0;
+            if (resto !== parseInt(documento.charAt(9))) return false;
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(documento.charAt(i)) * (11 - i);
+            }
+            resto = (soma * 10) % 11;
+            if (resto === 10 || resto === 11) resto = 0;
+            return resto === parseInt(documento.charAt(10));
+        }
+        if (tipo === 'rg') {
+            if (documento.length < 8 || documento.length > 9) return false;
+            return true;
+        }
+        if (tipo === 'cnh') {
+            if (documento.length === 11 || documento.length === 12) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    };
+
+if (!String.prototype.formatDocument)
+    /**
+     * Formata um documento (CPF, CNPJ, RG, CNH, telefone).
+     * @param {string} tipo - Tipo de documento ('cpf', 'cnpj', 'rg', 'cnh', 'telefone').
+     * @returns {string} - Documento formatado.
+     */
+    String.prototype.formatDocument = function (tipo) {
+        const document = this.replace(/[^\d]+/g, '');
+
+        if (tipo === 'cnpj' && document.length === 14)
+            return document.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+
+        if (tipo === 'cpf' && document.length === 11)
+            return document.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+
+        if (tipo === 'rg' && (document.length === 8 || document.length === 9))
+            return document.replace(/^(\d{2})(\d{3})(\d{3})(\d{0,1})$/, "$1.$2.$3-$4");
+
+        if (tipo === 'cnh' && (document.length === 11 || document.length === 12))
+            return document.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3.$4");
+
+        if (tipo === 'telefone' && (document.length === 10 || document.length === 11))
+            return document.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
+
+        return document;
+    };
+
+if (!String.prototype.removeFormatting)
+    /**
+     * Remove a formatação de uma string, mantendo apenas dígitos.
+     * @returns {string} - String sem formatação.
+     */
+    String.prototype.removeFormatting = function () {
+        return this.replace(/[^\d]+/g, '');
+    };
+
+if (!String.prototype.isEmail)
+    /**
+     * Verifica se a string é um email válido.
+     * @returns {boolean} - True se a string for um email válido.
+     */
+    String.prototype.isEmail = function () {
+        const regex = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/;
+        return regex.test(this.valueOf());
+    };
+
+if (!String.prototype.isURL)
+    /**
+     * Verifica se a string é uma URL válida.
+     * @returns {boolean} - True se a string for uma URL válida.
+     */
+    String.prototype.isURL = function () {
+        const pattern = new RegExp(
+            '^(https?:\\/\\/)?' + // protocolo (http:// ou https://)
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // nome do domínio
+            '((\\d{1,3}\\.){3}\\d{1,3}))' + // ou endereço IP (v4)
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // porta e caminho
+            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+            '(\\#[-a-z\\d_]*)?$', // fragmento
+            'i' // flag case-insensitive
+        );
+        return !!pattern.test(this.valueOf()); // Retorna true ou false
+    };
+
+if (!Object.prototype.isNullOrEmpty)
+    /**
+     * Verifica se um objeto é nulo ou vazio.
+     * @returns {boolean} - True se o objeto for nulo ou vazio.
+     */
+    Object.prototype.isNullOrEmpty = function () {
+        // Verifica se o objeto é null ou undefined
+        if (this === null || this === undefined) {
+            return true;
+        }
+
+        // Verifica se o objeto está vazio (sem propriedades próprias)
+        if (Object.keys(this).length === 0) {
+            return true;
+        }
+
+        // Caso contrário, o objeto não está vazio
+        return false;
+    };
+
+if (!Object.prototype.atributosVazios)
+    /**
+     * Verifica se todos os atributos de um objeto estão vazios.
+     * @returns {boolean} - True se todos os atributos estiverem vazios.
+     */
+    Object.prototype.atributosVazios = function () {
+        return Object.values(this).every(value =>
+            value === null || value === undefined || value === '' ||
+            (Array.isArray(value) && value.length === 0) ||
+            (typeof value === 'object' && Object.keys(value).length === 0)
+        );
+    };
+
+// Adiciona o método atributosPreenchidos ao Object.prototype
+if (!Object.prototype.atributosPreenchidos)
+    /**
+     * Verifica se todos os atributos de um objeto estão preenchidos.
+     * @returns {boolean} - True se todos os atributos estiverem preenchidos.
+     */
+    Object.prototype.atributosPreenchidos = function () {
+        return Object.values(this).every(value =>
+            value !== null && value !== undefined && value !== '' &&
+            (!Array.isArray(value) || value.length > 0) &&
+            (typeof value !== 'object' || Object.keys(value).length > 0)
+        );
+    };
+
+// #endregion 
+
 // #region Classes
 class Cookie {
-    
+
     /**
      * Define um cookie.
      * @param {string} name - Nome do cookie.
@@ -490,7 +861,7 @@ function getRandom(min, max) {
 }
 // #endregion
 
-// 📌 **Exportação para ESModules (ESM)**
+// **Exportação para ESModules (ESM)**
 export {
     Cookie,
     serializeJson,
@@ -511,7 +882,7 @@ export {
     getRandom
 };
 
-// 📌 **Exportação para CommonJS (Node.js)**
+// **Exportação para CommonJS (Node.js)**
 if (typeof module !== "undefined" && typeof exports !== "undefined") {
     module.exports = {
         Cookie,
