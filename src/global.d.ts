@@ -155,6 +155,7 @@ declare global {
         isObject: (value: Object) => boolean;
         getRandom: (min: number, max: number) => number;
     }
+    
 }
 
 export { };
