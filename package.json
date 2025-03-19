@@ -1,6 +1,6 @@
 {
   "name": "@chroma.studio/lummascriptify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Uma biblioteca de utilitários JavaScript para simplificar tarefas comuns no desenvolvimento web.",
   "license": "AGPL-3.0",
   "main": "dist/index.cjs.js",
@@ -13,7 +13,7 @@
     "clear": "rmdir /s /q dist",
     "build": "npx rollup -c",
     "build:types": "tsc",
-    "build:all": "npm run clear && npm run build && npm run build:types"    
+    "build:all": "npm run clear && npm run build && npm run build:types"
   },
   "keywords": [
     "javascript",
